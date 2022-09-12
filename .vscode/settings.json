@@ -1,0 +1,18 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.gradle": true,
+        "**/.idea": true,
+        "**/.mvn": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true
+    },
+    "search.exclude": {
+        "**/node": true,
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/build": true,
+        "**/target": true
+    }
+}
