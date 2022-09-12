@@ -4,6 +4,11 @@
       "name": "thegraid.assetBase",
       "type": "java.lang.String",
       "description": "where to find/load extra jars (and other resources)"
+    },
+    {
+      "name": "thegraid.lobbyUrl",
+      "type": "java.lang.String",
+      "description": "where to report game results."
     }
   ]
 }

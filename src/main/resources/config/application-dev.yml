@@ -51,7 +51,16 @@ spring:
         enabled: true
 
 server:
-  port: 8080
+  error:
+    include-exception: true
+  port: 8445
+  ssl:
+    key-alias: game5.thegraid.com
+    key-store: /Users/jpeck/keys/keystore.p12
+    key-store-password: ${KEYPASS}
+    key-store-type: PKCS12
+    # The ciphers suite enforce the security by deactivating some old and deprecated SSL cipher, this list was tested against SSL Labs (https://www.ssllabs.com/ssltest/)
+    ciphers: TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 ,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA,TLS_RSA_WITH_CAMELLIA_128_CBC_SHA
 
 # ===================================================================
 # JHipster specific properties
@@ -78,7 +87,7 @@ jhipster:
         base64-secret: YzdjZjczMTJlNDhjY2RjNjE5ZTI1ZmNlYjYxYjQ0ZDM1M2Q5YzIwN2ZmMjAxYTE3MzM0N2JmNWRiYmE0NTFhNjY0YThmMjk5OTQwMjM2NDFlZTI2OTU1NmE4Mjk3ZDEyOWY4MGEzN2FmMWEyODVmYzE5YWEwM2JmYjJiMDg0ZWM=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
-        token-validity-in-seconds-for-remember-me: 2592000
+        token-validity-in-seconds-for-remember-me: 2592000 # 720hr = 30d
   logging:
     use-json-format: false # By default, logs are not in Json format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
@@ -98,3 +107,6 @@ jhipster:
 # application:
 thegraid:
   assetBase: /Users/jpeck/Data/Programs/mavenRepo/
+  lobbyUrl: https://lobby2.thegraid.com:8442/gammaDS/ # /results (/login ?)
+  # Note: we can generate our own JWT to authenticate ourself to lobby (so no login!)
+  # Likewise: lobby has our JWT key, and can authenticate to us
