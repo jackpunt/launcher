@@ -17,8 +17,9 @@ logging:
   level:
     ROOT: DEBUG
     tech.jhipster: DEBUG
-    org.hibernate.SQL: DEBUG
-    com.thegraid: DEBUG
+    org.hibernate.SQL: WARN
+    com.thegraid: INFO
+    javax.management: INFO
 
 spring:
   devtools:
@@ -95,3 +96,5 @@ jhipster:
 # ===================================================================
 
 # application:
+thegraid:
+  assetBase: /Users/jpeck/Data/Programs/mavenRepo/

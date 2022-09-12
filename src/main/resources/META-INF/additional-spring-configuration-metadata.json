@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "thegraid.assetBase",
+      "type": "java.lang.String",
+      "description": "where to find/load extra jars (and other resources)"
+    }
+  ]
+}

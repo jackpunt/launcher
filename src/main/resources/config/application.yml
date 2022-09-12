@@ -33,7 +33,7 @@ management:
           ['configprops', 'env', 'health', 'info', 'jhimetrics', 'jhiopenapigroups', 'logfile', 'loggers', 'prometheus', 'threaddump']
   endpoint:
     health:
-      show-details: when_authorized
+      show-details: WHEN_AUTHORIZED
       roles: 'ROLE_ADMIN'
       probes:
         enabled: true
@@ -99,7 +99,7 @@ spring:
     allow-bean-definition-overriding: true
   mvc:
     pathmatch:
-      matching-strategy: ant_path_matcher
+      matching-strategy: ANT_PATH_MATCHER
   security:
     user:
       name: admin
