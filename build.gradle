@@ -147,6 +147,14 @@ repositories {
     // mavenLocal()
     mavenCentral()
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
+    mavenLocal () {
+        content {
+            // this repository *only* contains artifacts with group "gamma" & "jpeck.local"
+            includeGroup "com.thegraid.gamma"
+            includeGroup "gamma"
+            includeGroup "jpeck.local"          // for "userAI", "generic", "util"?
+        }
+    }
 }
 
 dependencies {
@@ -192,6 +200,15 @@ dependencies {
     implementation "io.micrometer:micrometer-registry-prometheus"
     implementation "io.dropwizard.metrics:metrics-core"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+    
+    // mavenLocal:
+    implementation 'gamma:gamma-main:0.1.1-SNAPSHOT'
+    implementation 'gamma:gamma-p:0.1.1-SNAPSHOT', {
+        exclude group: 'org.springframework.flex'
+    }
+    implementation 'gamma:gamma-spi:0.1.1-SNAPSHOT'
+    implementation 'com.thegraid.gamma:gamma-jh:0.1.1' // domain objects, vs 'share'
+    implementation 'jpeck.local:util:2.8'
 }
 
 if (project.hasProperty("gae")) {

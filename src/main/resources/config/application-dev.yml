@@ -85,9 +85,8 @@ jhipster:
       jwt:
         # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
         base64-secret: YzdjZjczMTJlNDhjY2RjNjE5ZTI1ZmNlYjYxYjQ0ZDM1M2Q5YzIwN2ZmMjAxYTE3MzM0N2JmNWRiYmE0NTFhNjY0YThmMjk5OTQwMjM2NDFlZTI2OTU1NmE4Mjk3ZDEyOWY4MGEzN2FmMWEyODVmYzE5YWEwM2JmYjJiMDg0ZWM=
-        # Token is valid 24 hours
-        token-validity-in-seconds: 86400
-        token-validity-in-seconds-for-remember-me: 2592000 # 720hr = 30d
+        token-validity-in-seconds: 86400 # Token is valid 24 hours
+        token-validity-in-seconds-for-remember-me: 2592000 # Token is valid 720hr = 30d
   logging:
     use-json-format: false # By default, logs are not in Json format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
@@ -107,6 +106,8 @@ jhipster:
 # application:
 thegraid:
   assetBase: /Users/jpeck/Data/Programs/mavenRepo/
+  gameCtlUrl: https://${server.key-alias}:${server.port}/gameCtrl/
   lobbyUrl: https://lobby2.thegraid.com:8442/gammaDS/ # /results (/login ?)
   # Note: we can generate our own JWT to authenticate ourself to lobby (so no login!)
   # Likewise: lobby has our JWT key, and can authenticate to us
+  wssPath: clientGame

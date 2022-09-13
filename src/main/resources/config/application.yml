@@ -105,7 +105,7 @@ spring:
       name: admin
       password: admin
       roles:
-        - ADMIN
+        - ADMIN # AuthoritiesConstants.ADMIN
         - USER
   task:
     execution:
