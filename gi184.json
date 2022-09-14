@@ -1,0 +1,10 @@
+{
+  "gameInst": {
+    "id": 148,
+    "version": 3,
+    "hostUrl": null,
+    "playerA": { "id": 4, "displayClient": "https://game4.thegraid.com:8445/map" },
+    "playerB": { "id": 1, "displayClient": "https://game4.thegraid.com:8445/map" }
+  },
+  "resultToken": {}
+}

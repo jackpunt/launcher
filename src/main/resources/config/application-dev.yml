@@ -19,6 +19,7 @@ logging:
     tech.jhipster: DEBUG
     org.hibernate.SQL: WARN
     com.thegraid: INFO
+    jdk.event.security: INFO
     javax.management: INFO
 
 spring:
@@ -29,6 +30,7 @@ spring:
     livereload:
       enabled: false # we use Webpack dev server + BrowserSync for livereload
   jackson:
+    # default-property-inclusion: NON_NULL
     serialization:
       indent-output: true
   messages:
@@ -105,9 +107,11 @@ jhipster:
 
 # application:
 thegraid:
+  thisHost: ${server.ssl.key-alias}
+  thisPort: ${server.port}
   assetBase: /Users/jpeck/Data/Programs/mavenRepo/
-  gameCtlUrl: https://${server.key-alias}:${server.port}/gameCtrl/
-  lobbyUrl: https://lobby2.thegraid.com:8442/gammaDS/ # /results (/login ?)
+  gameCtlUrl: https://${thegraid.thisHost}:${thegraid.thisPort}/gameCtl/ # +${giid}
+  gameWssUrl: wss://${thegraid.thisHost}:${thegraid.thisPort}/clientGame/ # +${giid}
+  lobbyUrl: https://lobby2.thegraid.com:8442/gammaDS/ # /results+${giid} (& maybe: /login ?)
   # Note: we can generate our own JWT to authenticate ourself to lobby (so no login!)
   # Likewise: lobby has our JWT key, and can authenticate to us
-  wssPath: clientGame

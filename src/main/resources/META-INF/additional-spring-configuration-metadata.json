@@ -11,14 +11,24 @@
       "description": "where to report game results."
     },
     {
-      "name": "thegraid.wssPath",
-      "type": "java.lang.String",
-      "description": "A description for 'thegraid.wssPath'"
-    },
-    {
       "name": "thegraid.gameCtlUrl",
       "type": "java.lang.String",
       "description": "A description for 'thegraid.gameCtlUrl'"
+    },
+    {
+      "name": "thegraid.thisHost",
+      "type": "java.lang.String",
+      "description": "A description for 'thegraid.thisHost'"
+    },
+    {
+      "name": "thegraid.thisPort",
+      "type": "java.lang.String",
+      "description": "A description for 'thegraid.thisPort'"
+    },
+    {
+      "name": "thegraid.gameWssUrl",
+      "type": "java.lang.String",
+      "description": "A description for 'thegraid.gameWssUrl'"
     }
   ]
 }

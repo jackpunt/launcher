@@ -25,7 +25,7 @@ plugins {
 group = "com.thegraid"
 version = "0.0.1-SNAPSHOT"
 
-description = ""
+description = "Rest service to launch/exec GameInst"
 
 sourceCompatibility=11
 targetCompatibility=11
@@ -149,8 +149,9 @@ repositories {
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
     mavenLocal () {
         content {
-            // this repository *only* contains artifacts with group "gamma" & "jpeck.local"
+            // this repository *only* supplies artifacts for "com.thegraid", "gamma" & "jpeck.local"
             includeGroup "com.thegraid.gamma"
+            includeGroup "com.thegraid"
             includeGroup "gamma"
             includeGroup "jpeck.local"          // for "userAI", "generic", "util"?
         }
@@ -202,13 +203,20 @@ dependencies {
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
     
     // mavenLocal:
+    implementation 'jpeck.local:util:2.8'
     implementation 'gamma:gamma-main:0.1.1-SNAPSHOT'
     implementation 'gamma:gamma-p:0.1.1-SNAPSHOT', {
         exclude group: 'org.springframework.flex'
     }
     implementation 'gamma:gamma-spi:0.1.1-SNAPSHOT'
-    implementation 'com.thegraid.gamma:gamma-jh:0.1.1' // domain objects, vs 'share'
-    implementation 'jpeck.local:util:2.8'
+    implementation 'com.thegraid.gamma:gamma-jh-domain:0.1.3' // domain objects, vs 'share'
+
+    implementation "javax.annotation:javax.annotation-api"
+    implementation "org.springframework.boot:spring-boot-starter-cache"
+    implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 }
 
 if (project.hasProperty("gae")) {
@@ -230,7 +238,17 @@ task cleanResources(type: Delete) {
 wrapper {
     gradleVersion = "7.4.2"
 }
-
+// gradle publishToMavenLocal
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.thegraid'
+            artifactId = 'launcher'
+            //version = '0.1.2'     // overrides groupId & version from above
+            from components.java
+        }
+    }
+}
 
 compileJava.dependsOn processResources
 processResources.dependsOn bootBuildInfo

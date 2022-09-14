@@ -1,18 +1,29 @@
 package com.thegraid.share;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thegraid.gamma.domain.GameInst;
 //import com.thegraid.share.auth.TicketService.Ticket;
 import com.thegraid.share.domain.intf.IGameInstDTO;
 import java.time.Instant;
 
-// import flexjson.JSONDeserializer;
-// import flexjson.JSONSerializer;
-
 public interface LobbyLauncher {
-    /** form info received from Lobby: GameInst and Ticket */
+    /** RequestBody received from Lobby: GameInst and Ticket */
     public static class LaunchInfo {
 
-        public IGameInstDTO gameInst;
+        static ObjectMapper mapper = new ObjectMapper().setDefaultPropertyInclusion(Include.NON_NULL);
+
+        public String toString() {
+            try {
+                return mapper.writeValueAsString(this);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("JSON conversion failed", e);
+            }
+        }
+
+        public GameInst gameInst;
         public String resultTicket;
     }
 
@@ -30,7 +41,7 @@ public interface LobbyLauncher {
 
             Impl() {}
 
-            public Impl(IGameInstDTO gi) {
+            public Impl(GameInst gi) {
                 this.started = gi.getStarted();
                 this.hostUrl = gi.getHostUrl();
             }
