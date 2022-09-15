@@ -1,0 +1,29 @@
+{
+  "gameInst": {
+    "id": 154,
+    "version": 610,
+    "gameName": "Player1s-vs-Player2b",
+    "hostUrl": "https://game5.thegraid.com:8445/gamma-web/GameControl/154",
+    "passcode": null,
+    "created": "2011-01-12T14:24:42Z",
+    "started": null,
+    "finished": null,
+    "updated": "2022-08-16T12:41:00Z",
+    "scoreA": null,
+    "scoreB": null,
+    "ticks": null,
+    "playerA": { "id": 1, "name": null, "displayClient": null, "gameClass": null, "mainJar": null, "user": null },
+    "playerB": { "id": 1, "name": null, "displayClient": null, "gameClass": null, "mainJar": null, "user": null },
+    "gameClass": {
+      "id": 1,
+      "name": "Hexagen0a",
+      "revision": "0.0.0.A",
+      "docsPath": "/docs/for/Hexagen0a",
+      "launcherPath": "gamma/gamma-main/1.0-SNAPSHOT/gamma-main-1.0-SNAPSHOT.jar!gamma.main.GammaLauncher",
+      "gamePath": "gamma/gamma-si/1.0-SNAPSHOT/gamma-si-1.0-SNAPSHOT.jar!gamma.games.hexagen.Hexagen",
+      "propNames": ""
+    },
+    "gameInstProps": {}
+  },
+  "resultsToken": ""
+}
