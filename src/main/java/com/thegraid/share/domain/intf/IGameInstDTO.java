@@ -1,9 +1,16 @@
 package com.thegraid.share.domain.intf;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Map;
 
+@JsonIgnoreProperties({ "version" })
+@JsonDeserialize(as = IGameInstDTO.Impl.class)
 public interface IGameInstDTO extends Serializable {
     public static String Role_A = "A";
     public static String Role_B = "B";
@@ -25,6 +32,8 @@ public interface IGameInstDTO extends Serializable {
     // findGameInstProps(this.getId()).parseJSON().asMap()
     public Map<String, Object> getPropertyMap();
 
+    public IGameInstPropsDTO getProps();
+
     public Integer getScoreA();
 
     public Integer getScoreB();
@@ -34,6 +43,8 @@ public interface IGameInstDTO extends Serializable {
     public Instant getCreated();
 
     public Instant getStarted();
+
+    public Instant getUpdated();
 
     public Instant getFinished();
 
@@ -51,6 +62,10 @@ public interface IGameInstDTO extends Serializable {
 
     public void setPasscode(String passcode);
 
+    public void setProperyMap(Map<String, Object> propertyMap);
+
+    public void setProps(IGameInstPropsDTO props);
+
     public void setScoreA(Integer scoreA);
 
     public void setScoreB(Integer scoreB);
@@ -61,185 +76,205 @@ public interface IGameInstDTO extends Serializable {
 
     public void setStarted(Instant started);
 
+    public void setUpdated(Instant updated);
+
     public void setFinished(Instant finished);
 
     public static class Impl implements IGameInstDTO {
 
         private Long id;
         private IGameClassDTO gameClass;
+
+        @JsonIgnoreProperties(value = { "gameClass", "mainJar", "user" }, allowSetters = true)
         private IPlayerDTO playerA;
+
+        @JsonIgnoreProperties(value = { "gameClass", "mainJar", "user" }, allowSetters = true)
         private IPlayerDTO playerB;
+
         private String gameName;
         private String hostUrl;
-        private String password;
+        private String passcode;
         private Map<String, Object> propertyMap;
+
+        @JsonIgnoreProperties(value = { "gameInst" }, allowSetters = true)
+        private IGameInstPropsDTO props;
+
         private Integer scoreA;
         private Integer scoreB;
         private Integer ticks;
         private Instant created;
         private Instant started;
+        private Instant updated;
         private Instant finished;
 
         @Override
         public Long getId() {
-            // TODO Auto-generated method stub
-            return null;
+            return id;
         }
 
         @Override
         public IGameClassDTO getGameClass() {
-            // TODO Auto-generated method stub
-            return null;
+            return gameClass;
         }
 
         @Override
         public IPlayerDTO getPlayerA() {
-            // TODO Auto-generated method stub
-            return null;
+            return playerA;
         }
 
         @Override
         public IPlayerDTO getPlayerB() {
-            // TODO Auto-generated method stub
-            return null;
+            return playerB;
         }
 
         @Override
         public String getGameName() {
-            // TODO Auto-generated method stub
-            return null;
+            return gameName;
         }
 
         @Override
         public String getHostUrl() {
-            // TODO Auto-generated method stub
-            return null;
+            return hostUrl;
         }
 
         @Override
         public String getPasscode() {
-            // TODO Auto-generated method stub
-            return null;
+            return passcode;
         }
 
         @Override
         public Map<String, Object> getPropertyMap() {
-            // TODO Auto-generated method stub
-            return null;
+            return propertyMap;
+        }
+
+        @Override
+        public IGameInstPropsDTO getProps() {
+            return props;
         }
 
         @Override
         public Integer getScoreA() {
-            // TODO Auto-generated method stub
-            return null;
+            return scoreA;
         }
 
         @Override
         public Integer getScoreB() {
-            // TODO Auto-generated method stub
-            return null;
+            return scoreB;
         }
 
         @Override
         public Integer getTicks() {
-            // TODO Auto-generated method stub
-            return null;
+            return ticks;
         }
 
         @Override
         public Instant getCreated() {
-            // TODO Auto-generated method stub
-            return null;
+            return created;
         }
 
         @Override
         public Instant getStarted() {
-            // TODO Auto-generated method stub
-            return null;
+            return started;
+        }
+
+        @Override
+        public Instant getUpdated() {
+            return updated;
         }
 
         @Override
         public Instant getFinished() {
-            // TODO Auto-generated method stub
-            return null;
+            return finished;
         }
 
         @Override
         public void setId(Long id) {
-            // TODO Auto-generated method stub
-
+            this.id = id;
         }
 
         @Override
         public void setGameClass(IGameClassDTO gameClass) {
-            // TODO Auto-generated method stub
-
+            this.gameClass = gameClass;
         }
 
         @Override
         public void setPlayerA(IPlayerDTO playerA) {
-            // TODO Auto-generated method stub
-
+            this.playerA = playerA;
         }
 
         @Override
         public void setPlayerB(IPlayerDTO playerB) {
-            // TODO Auto-generated method stub
-
+            this.playerB = playerB;
         }
 
         @Override
         public void setGameName(String gameName) {
-            // TODO Auto-generated method stub
-
+            this.gameName = gameName;
         }
 
         @Override
         public void setHostUrl(String hostUrl) {
-            // TODO Auto-generated method stub
-
+            this.hostUrl = hostUrl;
         }
 
         @Override
         public void setPasscode(String passcode) {
-            // TODO Auto-generated method stub
+            this.passcode = passcode;
+        }
 
+        @Override
+        public void setProperyMap(Map<String, Object> propertyMap) {
+            this.propertyMap = propertyMap;
+        }
+
+        @Override
+        public void setProps(IGameInstPropsDTO props) {
+            this.props = props;
         }
 
         @Override
         public void setScoreA(Integer scoreA) {
-            // TODO Auto-generated method stub
-
+            this.scoreA = scoreA;
         }
 
         @Override
         public void setScoreB(Integer scoreB) {
-            // TODO Auto-generated method stub
-
+            this.scoreB = scoreB;
         }
 
         @Override
         public void setTicks(Integer ticks) {
-            // TODO Auto-generated method stub
-
+            this.ticks = ticks;
         }
 
         @Override
         public void setCreated(Instant created) {
-            // TODO Auto-generated method stub
-
+            this.created = created;
         }
 
         @Override
         public void setStarted(Instant started) {
-            // TODO Auto-generated method stub
+            this.started = started;
+        }
 
+        @Override
+        public void setUpdated(Instant updated) {
+            this.updated = updated;
         }
 
         @Override
         public void setFinished(Instant finished) {
-            // TODO Auto-generated method stub
+            this.finished = finished;
+        }
 
+        static ObjectMapper mapper = new ObjectMapper().setDefaultPropertyInclusion(Include.NON_NULL);
+
+        public String toString() {
+            try {
+                return mapper.writeValueAsString(this);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("JSON conversion failed", e);
+            }
         }
     }
 }

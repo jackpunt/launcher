@@ -1,10 +1,9 @@
 package com.thegraid.web.rest;
 
-import com.thegraid.gamma.domain.GameInst;
-import com.thegraid.gamma.domain.Player;
 import com.thegraid.share.LobbyLauncher.LaunchInfo;
 import com.thegraid.share.LobbyLauncher.LaunchResults;
 import com.thegraid.share.domain.intf.IGameInstDTO;
+import com.thegraid.share.domain.intf.IPlayerDTO;
 import gamma.main.Launcher;
 import gamma.main.Launcher.Game;
 import gamma.main.Launcher.PlayerInfo;
@@ -68,9 +67,9 @@ public class LauncherResource {
     public static class GameInfo {
 
         public Launcher.Game game;
-        public GameInst gameInst;
+        public IGameInstDTO gameInst;
 
-        GameInfo(Launcher.Game game, GameInst gameInst) {
+        GameInfo(Launcher.Game game, IGameInstDTO gameInst) {
             this.game = game;
             this.gameInst = gameInst;
         }
@@ -107,14 +106,14 @@ public class LauncherResource {
     @PostMapping(value = "launch", produces = "application/json")
     @ResponseBody
     public ResponseEntity<LaunchResults> launchPost(@RequestBody LaunchInfo launchInfo) {
-        GameInst gameInstDTO = launchInfo.gameInst;
+        IGameInstDTO gameInstDTO = launchInfo.gameInst;
         String resultTicket = launchInfo.resultTicket;
-        log.debug("\nlaunchPost: gameInst={} resultTicket={}", gameInstDTO, resultTicket);
+        log.info("lanuchPost: launchInfo={}", launchInfo);
         LaunchResults results = launch(gameInstDTO, resultTicket);
         return ResponseEntity.ok(results);
     }
 
-    private LaunchResults launch(GameInst gameInst, String resultTicket) {
+    private LaunchResults launch(IGameInstDTO gameInst, String resultTicket) {
         String giid = gameInst.getId().toString();
         Launcher.Static.logClassLoader(log, "web-app-root", this.getClass().getClassLoader(), false); // use true for internal details
         log.info("Try launch(giid={}, props={})", giid, "?"); // gameInst.getPropertyMap());
@@ -142,8 +141,8 @@ public class LauncherResource {
             results.setWssURL(gameWssUrl + giid);
             started = game.start().toInstant(); // TODO: fix when game.start() is Instant
             results.setStarted(game.start().toInstant());
-            log.warn("\nNew launch: game started: {} @ {} on {} wss:{}", game, started, gameCtlUrl, gameWssUrl);
-            log.info("\nresults={}", results);
+            log.warn("\nNew launch: game started: {} @ {} on {} wss = {}", game, started, gameCtlUrl, gameWssUrl);
+            log.info("\nresults={}", results.toString());
             if (started == null) {
                 log.error("New launch: game failed: {}", game);
             }
@@ -157,7 +156,7 @@ public class LauncherResource {
         return results;
     }
 
-    private Launcher.Game makeGameInstance(GameInst gameInst) {
+    private Launcher.Game makeGameInstance(IGameInstDTO gameInst) {
         return new GameImpl();
     }
 
@@ -167,10 +166,11 @@ public class LauncherResource {
 
     /**
      * TODO: GameInstDTO or IPlayerDTO should include the [globally unique] gpid of each Player.
+     *
      * For now, we synthesize a token number. [unique for this gameInst]
      */
-    private Long recordGPID(GameInst gameInst, String role, Game game) {
-        Player player = (role == IGameInstDTO.Role_A ? gameInst.getPlayerA() : gameInst.getPlayerB());
+    private Long recordGPID(IGameInstDTO gameInst, String role, Game game) {
+        IPlayerDTO player = (role == IGameInstDTO.Role_A ? gameInst.getPlayerA() : gameInst.getPlayerB());
         Long gpid = (gameInst.getId() * 1000 + player.getId()) * 10 + (role == IGameInstDTO.Role_A ? 1L : 2L);
         //player.setGpid(gpid); // for the duration of using this IPlayerDTO!
         garMap.put(gpid, new GameAndRole(game, role));

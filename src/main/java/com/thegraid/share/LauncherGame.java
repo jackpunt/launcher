@@ -622,8 +622,7 @@ public interface LauncherGame {
             log.info("{}: ClassLoader={}, parent={}", name, cl, cl.getParent());
             if (
                 logPath && (cl instanceof URLClassLoader)
-            ) //	log.info("{}: classpath={}", name, Stringify.array("[\n ",((URLClassLoader)cl).getURLs(),",\n ","]",new StringBuilder()));
-            for (URL url : ((URLClassLoader) cl).getURLs()) log.info("{}: classpath={}", name, url.toString());
+            ) for (URL url : ((URLClassLoader) cl).getURLs()) log.info("{}: classpath={}", name, url.toString()); //	log.info("{}: classpath={}", name, Stringify.array("[\n ",((URLClassLoader)cl).getURLs(),",\n ","]",new StringBuilder()));
         }
 
         public static void printClassLoader(String name, ClassLoader cl, boolean logPath) {
@@ -646,9 +645,9 @@ public interface LauncherGame {
         }
 
         // technique to resolve version conflicts, keeping each [dependent] jar in it own classloader
-        // http://onjava.com/pub/a/onjava/2005/04/13/dependencies.html?page=2
+        // https://onjava.com/pub/a/onjava/2005/04/13/dependencies.html?page=2
         // Downloads/jar-dependencies.jar
-        // or http://classworlds.codehaus.org/
+        // or https://classworlds.codehaus.org/
         // or use OSGI
 
         // URLClassLoader with proper paths:
