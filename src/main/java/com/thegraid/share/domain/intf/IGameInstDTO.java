@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Map;
@@ -267,7 +269,11 @@ public interface IGameInstDTO extends Serializable {
             this.finished = finished;
         }
 
-        static ObjectMapper mapper = new ObjectMapper().setDefaultPropertyInclusion(Include.NON_NULL);
+        static ObjectMapper mapper = JsonMapper
+            .builder()
+            .addModule(new JavaTimeModule())
+            .build()
+            .setDefaultPropertyInclusion(Include.NON_NULL);
 
         public String toString() {
             try {

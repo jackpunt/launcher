@@ -1,7 +1,6 @@
 package com.thegraid.share;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-//import com.thegraid.share.auth.TicketService.Ticket;
 import com.thegraid.share.domain.intf.IGameInstDTO;
 import com.thegraid.share.domain.intf.IGameInstPropsDTO;
 import java.time.Instant;

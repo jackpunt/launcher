@@ -1,0 +1,47 @@
+{
+  "resultTicket": "P=gF+mNsgcfaPEV2e0AsytfVSHlzVy6kGk0DdWjy43DqE=&T=18401ebcd63&U=user1&V=109",
+  "gpidB": 110,
+  "gpidA": 109,
+  "gameProps": {
+    "updated": 1485691881.0,
+    "mapSize": 444,
+    "seed": 9999
+  },
+  "gameInst": {
+    "updated": 1660653660.0,
+    "created": 1294842282.0,
+    "props": {
+      "updated": 1485691881.0,
+      "mapSize": 444,
+      "seed": 9999
+    },
+    "hostUrl": "https://game5.thegraid.com:8445/gamma-web/GameControl/154",
+    "gameName": "Player1s-vs-Player2b",
+    "playerB": {
+      "displayClient": "https://game4.thegraid.com:8445/map",
+      "rankTime": 1291161600.0,
+      "scoreTime": 1291161600.0,
+      "score": 500,
+      "rank": 1,
+      "name": "Player2b"
+    },
+    "playerA": {
+      "displayClient": "https://game4.thegraid.com:8445/map",
+      "rankTime": 1289520000.0,
+      "scoreTime": 1289520000.0,
+      "score": 0,
+      "rank": 3,
+      "name": "Player1s"
+    },
+    "gameClass": {
+      "updated": 1488110506.0,
+      "launcherPath": "gamma/gamma-main/1.0-SNAPSHOT/gamma-main-1.0-SNAPSHOT.jar!gamma.main.GammaLauncher",
+      "gamePath": "gamma/gamma-si/1.0-SNAPSHOT/gamma-si-1.0-SNAPSHOT.jar!gamma.games.hexagen.Hexagen",
+      "docsPath": "/docs/for/Hexagen0a",
+      "revision": "0.0.0.A",
+      "name": "Hexagen0a",
+      "id": 1
+    },
+    "id": 154
+  }
+}

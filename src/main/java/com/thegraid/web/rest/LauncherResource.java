@@ -1,9 +1,13 @@
 package com.thegraid.web.rest;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.thegraid.share.LobbyLauncher.LaunchInfo;
 import com.thegraid.share.LobbyLauncher.LaunchResults;
 import com.thegraid.share.domain.intf.IGameInstDTO;
-import com.thegraid.share.domain.intf.IPlayerDTO;
 import gamma.main.Launcher;
 import gamma.main.Launcher.Game;
 import gamma.main.Launcher.PlayerInfo;
@@ -31,6 +35,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/launcher")
 public class LauncherResource {
 
+    static ObjectMapper mapper = JsonMapper.builder().addModule(new JavaTimeModule()).build().setDefaultPropertyInclusion(Include.NON_NULL);
+
+    private String jsonify(Object obj) {
+        // https://www.baeldung.com/spring-boot-customize-jackson-objectmapper#1-objectmapper
+        try {
+            return mapper.writeValueAsString(obj);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("JSON conversion failed", e);
+        }
+    }
+
     private static final Logger log = LoggerFactory.getLogger(LauncherResource.class);
 
     @Autowired
@@ -49,19 +64,9 @@ public class LauncherResource {
             this.role = role;
         }
 
-        /** GameAndRole mapped by gpid */
+        /** GameAndRole mapped by gpid --> {game, role} */
         @Component
-        public static class Map extends ConcurrentHashMap<Long, GameAndRole> {
-
-            public Long gpidFromString(String gpid) {
-                try {
-                    return Long.parseLong(gpid);
-                } catch (NumberFormatException ex) {
-                    log.debug("invalid gpid: {}, {}", gpid, ex);
-                    return null;
-                }
-            }
-        }
+        public static class Map extends ConcurrentHashMap<Long, GameAndRole> {}
     }
 
     public static class GameInfo {
@@ -76,7 +81,7 @@ public class LauncherResource {
 
         /** Launcher.Games [giid] that are run by this LaunchService.class instance */
         @Component
-        public static class Map extends ConcurrentHashMap<Object, GameInfo> {}
+        public static class Map extends ConcurrentHashMap<Long, GameInfo> {}
     }
 
     @Value("${thegraid.lobbyUrl}")
@@ -108,73 +113,60 @@ public class LauncherResource {
     public ResponseEntity<LaunchResults> launchPost(@RequestBody LaunchInfo launchInfo) {
         IGameInstDTO gameInstDTO = launchInfo.gameInst;
         String resultTicket = launchInfo.resultTicket;
-        log.info("lanuchPost: launchInfo={}", launchInfo);
-        LaunchResults results = launch(gameInstDTO, resultTicket);
+        log.info("lanuchPost: launchInfo={}", jsonify(launchInfo));
+        LaunchResults results = launch(gameInstDTO, launchInfo.gpidA, launchInfo.gpidB, resultTicket);
         return ResponseEntity.ok(results);
     }
 
-    private LaunchResults launch(IGameInstDTO gameInst, String resultTicket) {
-        String giid = gameInst.getId().toString();
+    private LaunchResults launch(IGameInstDTO gameInst, Long gpidA, Long gpidB, String resultTicket) {
+        Long giid = gameInst.getId();
         Launcher.Static.logClassLoader(log, "web-app-root", this.getClass().getClassLoader(), false); // use true for internal details
         log.info("Try launch(giid={}, props={})", giid, "?"); // gameInst.getPropertyMap());
-        log.info("Launch(giid={}): gameInst={}, propertyMap={}", giid, gameInst);
+        log.info("Launch(giid={}): gameInst={}, propertyMap={}", giid, gameInst, "PM");
         // initialize results from gameInst info:
         LaunchResults.Impl results = new LaunchResults.Impl(gameInst);
+        results.setWssURL(gameWssUrl + giid);
         Instant started = gameInst.getStarted(); // presumably: null
 
         if (started != null) {
             // gameInstController/database knows (starttime != null); must be resetGiid()
             // where client connects and auths to GameInst: [proto//host:port/client]
             String hostUrl = gameInst.getHostUrl();
-            results.setWssURL(gameWssUrl + giid);
             // Try find Game [may have started on a different hostUrl!]
-            Launcher.Game game = giMap.get(giid).game; // (gameInst.getId())
+            Launcher.Game game = giMap.get(giid).game;
             if (game != null) results.setHostURL(lobbyUrl + "results/" + giid); // indicate that we have the game
-            log.warn("Dubious launch: game started: {} @ {}", game, started, hostUrl);
+            log.warn("Dubious launch: game started: {} @ {} on {}", game, started, hostUrl);
         } else {
             // gameInst.hostUrl = "https://game5.thegraid.com:8445/gamma-web/GameControl/148"
             Launcher.Game game = makeGameInstance(gameInst); // make Game and PlayerAI/PlayerInfo
-            String resultUrl = lobbyUrl + "results/" + giid, wssUrl;
-            log.info("\ngame={}, lobbyUrl={}, giid={}, gameCtlUrl={}", game, lobbyUrl, giid, gameCtlUrl);
-            log.info("\ngameCtlUrl2={} resultUrl={}, giid={}", gameCtlUrl, resultUrl, giid);
+            String resultUrl = lobbyUrl + "results/" + giid;
+            // log.info("\ngame={}, lobbyUrl={}, giid={}, gameCtlUrl={}", game, lobbyUrl, giid, gameCtlUrl);
+            // log.info("\ngameCtlUrl2={} resultUrl={}, giid={}", gameCtlUrl, resultUrl, giid);
             results.setHostURL(gameCtlUrl + giid);
-            results.setWssURL(gameWssUrl + giid);
             started = game.start().toInstant(); // TODO: fix when game.start() is Instant
             results.setStarted(game.start().toInstant());
-            log.warn("\nNew launch: game started: {} @ {} on {} wss = {}", game, started, gameCtlUrl, gameWssUrl);
-            log.info("\nresults={}", results.toString());
+            log.warn("\nlaunch new game: {} at {} to {}", game, started, resultUrl);
+            log.info("\nlaunch results = {}", jsonify(results));
             if (started == null) {
                 log.error("New launch: game failed: {}", game);
             }
             // Inform Lobby what happened:
             if (!updateGameInfo(resultTicket, results)) log.error("Failed to updateGameInfo giid: {}", giid);
             giMap.put(giid, new GameInfo(game, gameInst));
-            recordGPID(gameInst, IGameInstDTO.Role_A, game);
-            recordGPID(gameInst, IGameInstDTO.Role_B, game);
+            garMap.put(gpidA, new GameAndRole(game, IGameInstDTO.Role_A));
+            garMap.put(gpidB, new GameAndRole(game, IGameInstDTO.Role_B));
             // TODO: remove when game is done;
         }
         return results;
     }
 
     private Launcher.Game makeGameInstance(IGameInstDTO gameInst) {
+        // TODO: instantiate Game class; with classloader, instantiate Player(s)
         return new GameImpl();
     }
 
     private boolean updateGameInfo(String resultsTicket, LaunchResults results) {
         return true; // TODO: WebClient.builder()
-    }
-
-    /**
-     * TODO: GameInstDTO or IPlayerDTO should include the [globally unique] gpid of each Player.
-     *
-     * For now, we synthesize a token number. [unique for this gameInst]
-     */
-    private Long recordGPID(IGameInstDTO gameInst, String role, Game game) {
-        IPlayerDTO player = (role == IGameInstDTO.Role_A ? gameInst.getPlayerA() : gameInst.getPlayerB());
-        Long gpid = (gameInst.getId() * 1000 + player.getId()) * 10 + (role == IGameInstDTO.Role_A ? 1L : 2L);
-        //player.setGpid(gpid); // for the duration of using this IPlayerDTO!
-        garMap.put(gpid, new GameAndRole(game, role));
-        return gpid;
     }
 
     /** Game impl as returned from GammaLauncher. */
