@@ -21,6 +21,7 @@ logging:
     com.thegraid: INFO
     jdk.event.security: INFO
     javax.management: INFO
+    # org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
 
 spring:
   devtools:
