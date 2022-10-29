@@ -6,7 +6,7 @@ application {
     blueprints []
     buildTool gradle
     cacheProvider no
-    clientFramework no
+    //clientFramework no // --skip_client
     clientPackageManager npm
     clientTheme none
     creationTimestamp 1662861860107
