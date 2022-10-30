@@ -10,8 +10,6 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -114,15 +112,6 @@ public class TicketService {
         }
         log.debug("TicketService.validateTicket={}, user={}", true, ticket.user);
         return true;
-    }
-
-    public String getCookieValue(String name, HttpServletRequest req) {
-        final Cookie[] cookies = req.getCookies();
-        if (cookies == null) return null;
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(name)) return cookie.getValue();
-        }
-        return null;
     }
 
     /** suitable for using a random String (JSESSIONID) as a per-user/session Salt

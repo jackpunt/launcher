@@ -1,5 +1,6 @@
 package com.thegraid.web.rest;
 
+import com.thegraid.share.auth.AuthUtils;
 import com.thegraid.share.auth.TicketService.GameTicketService;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,15 @@ public class GameResource {
         @RequestParam("V") String v,
         HttpServletRequest request
     ) {
-        String jsessions = gameTicketService.getCookieValue("JSESSIONID", request);
+        String jsessions = AuthUtils.getCookieValue("JSESSIONID", request);
         String isValid = gameTicketService.validateTicket(p, t, u, v, jsessions) ? "valid" : "invalid";
-        return ResponseEntity.ok("ticket " + isValid + ": " + giid);
+        return ResponseEntity.ok("ticket " + isValid + ": " + giid + " jsessions: " + jsessions);
+    }
+
+    @GetMapping("{giid}")
+    @ResponseBody
+    public ResponseEntity<String> gameCtl(@PathVariable(value = "giid", required = true) Long giid, HttpServletRequest request) {
+        String jsessions = AuthUtils.getCookieValue("JSESSIONID", request);
+        return ResponseEntity.ok("giid" + ": " + giid + " jsessions: " + jsessions);
     }
 }
