@@ -128,7 +128,10 @@ server:
   servlet:
     session:
       cookie:
+        path: /
+        secure: true
         http-only: true
+        domain: thegraid.com
 
 springdoc:
   show-actuator: true
