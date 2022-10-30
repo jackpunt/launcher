@@ -113,6 +113,6 @@ thegraid:
   assetBase: /Users/jpeck/Data/Programs/mavenRepo/
   gameCtlUrl: https://${thegraid.thisHost}:${thegraid.thisPort}/gameCtl/ # +${giid}
   gameWssUrl: wss://${thegraid.thisHost}:${thegraid.thisPort}/clientGame/ # +${giid}
-  lobbyUrl: https://lobby2.thegraid.com:8442/gammaDS/ # /results+${giid} (& maybe: /login ?)
+  lobbyUrl: https://lobby2.thegraid.com:8442/lobby/ # /results+${giid} (& maybe: /login ?)
   # Note: we can generate our own JWT to authenticate ourself to lobby (so no login!)
   # Likewise: lobby has our JWT key, and can authenticate to us

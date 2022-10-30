@@ -116,10 +116,10 @@ public class TicketService {
 
     /** suitable for using a random String (JSESSIONID) as a per-user/session Salt
      * @param jsessionid an unguessable String
-     * @return Long hash of derived from jesssionid
+     * @return Long hash derived from jsessionid
      */
     public Long getSaltFromJSession(String jsessionid) {
-        String s1 = jsessionid.substring(0, jsessionid.length() / 2 - 1);
+        String s1 = jsessionid.substring(0, jsessionid.length() / 2);
         String s2 = jsessionid.substring(jsessionid.length() / 2);
         int h1 = s1.hashCode();
         int h2 = s2.hashCode();

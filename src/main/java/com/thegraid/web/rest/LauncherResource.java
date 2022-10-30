@@ -130,21 +130,20 @@ public class LauncherResource {
 
         if (started != null) {
             // gameInstController/database knows (starttime != null); must be resetGiid()
-            // where client connects and auths to GameInst: [proto//host:port/client]
+            // where client connects and auths to GameInst: [proto://host:port/client]
             String hostUrl = gameInst.getHostUrl();
             // Try find Game [may have started on a different hostUrl!]
             Launcher.Game game = giMap.get(giid).game;
             if (game != null) results.setHostURL(lobbyUrl + "results/" + giid); // indicate that we have the game
             log.warn("Dubious launch: game started: {} @ {} on {}", game, started, hostUrl);
         } else {
-            // gameInst.hostUrl = "https://game5.thegraid.com:8445/gamma-web/GameControl/148"
             Launcher.Game game = makeGameInstance(gameInst); // make Game and PlayerAI/PlayerInfo
             String resultUrl = lobbyUrl + "results/" + giid;
             // log.info("\ngame={}, lobbyUrl={}, giid={}, gameCtlUrl={}", game, lobbyUrl, giid, gameCtlUrl);
             // log.info("\ngameCtlUrl2={} resultUrl={}, giid={}", gameCtlUrl, resultUrl, giid);
             results.setHostURL(gameCtlUrl + giid);
             started = game.start().toInstant(); // TODO: fix when game.start() is Instant
-            results.setStarted(game.start().toInstant());
+            results.setStarted(started);
             log.warn("\nlaunch new game: {} at {} to {}", game, started, resultUrl);
             log.info("\nlaunch results = {}", jsonify(results));
             if (started == null) {
