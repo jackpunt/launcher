@@ -49,9 +49,11 @@ public class LauncherResource {
     private static final Logger log = LoggerFactory.getLogger(LauncherResource.class);
 
     @Autowired
+    /** gpid -> {IGameInstDTO, Role} */
     private GameAndRole.Map garMap;
 
     @Autowired
+    /** giid -> IGameInstDTO */
     private GameInfo.Map giMap;
 
     public static class GameAndRole {
@@ -125,7 +127,6 @@ public class LauncherResource {
         log.info("Launch(giid={}): gameInst={}, propertyMap={}", giid, gameInst, "PM");
         // initialize results from gameInst info:
         LaunchResults.Impl results = new LaunchResults.Impl(gameInst);
-        results.setWssURL(gameWssUrl + giid);
         Instant started = gameInst.getStarted(); // presumably: null
 
         if (started != null) {
@@ -134,20 +135,25 @@ public class LauncherResource {
             String hostUrl = gameInst.getHostUrl();
             // Try find Game [may have started on a different hostUrl!]
             Launcher.Game game = giMap.get(giid).game;
-            if (game != null) results.setHostURL(lobbyUrl + "results/" + giid); // indicate that we have the game
+            if (game != null) {
+                results.setHostURL(gameCtlUrl + giid); // indicate that we have the game
+                results.setWssURL(gameWssUrl + giid);
+            }
             log.warn("Dubious launch: game started: {} @ {} on {}", game, started, hostUrl);
         } else {
             Launcher.Game game = makeGameInstance(gameInst); // make Game and PlayerAI/PlayerInfo
             String resultUrl = lobbyUrl + "results/" + giid;
             // log.info("\ngame={}, lobbyUrl={}, giid={}, gameCtlUrl={}", game, lobbyUrl, giid, gameCtlUrl);
             // log.info("\ngameCtlUrl2={} resultUrl={}, giid={}", gameCtlUrl, resultUrl, giid);
-            results.setHostURL(gameCtlUrl + giid);
             started = game.start().toInstant(); // TODO: fix when game.start() is Instant
             results.setStarted(started);
+            results.setHostURL(gameCtlUrl + giid);
+            results.setWssURL(gameWssUrl + giid);
             log.warn("\nlaunch new game: {} at {} to {}", game, started, resultUrl);
             log.info("\nlaunch results = {}", jsonify(results));
             if (started == null) {
                 log.error("New launch: game failed: {}", game);
+                return results; // with started == null
             }
             // Inform Lobby what happened:
             if (!updateGameInfo(resultTicket, results)) log.error("Failed to updateGameInfo giid: {}", giid);

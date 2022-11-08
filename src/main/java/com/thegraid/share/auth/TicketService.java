@@ -100,7 +100,7 @@ public class TicketService {
 
         String hash = signature(ticket.raw2, salt);
         if (!hash.equals(ticket.token)) {
-            log.trace(String.format("hash=%s,token=%s,raw2=%s\n", hash, ticket.token, ticket.raw2));
+            log.trace(String.format("hash=%s,token=%s,raw2=%s,salt=%s\n", hash, ticket.token, ticket.raw2, salt));
             log.debug("TicketService.validateTicket={}, user={}", "(corrupt)", ticket.user);
             return false; // corrupt data: throw new BadCredentialsException("") ?
         }
