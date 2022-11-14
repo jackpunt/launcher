@@ -1,23 +1,56 @@
 {
   "gameInst": {
     "id": 154,
-    "version": 610,
-    "gameName": "Player1s-vs-Player2b",
-    "hostUrl": "https://game5.thegraid.com:8445/gamma-web/GameControl/154",
-    "created": "2011-01-12T14:24:42Z",
-    "updated": "2022-08-16T12:41:00Z",
-    "playerA": { "id": 1, "displayClient": "https://game4.thegraid.com:8445/map" },
-    "playerB": { "id": 4, "displayClient": "https://game4.thegraid.com:8445/map" },
     "gameClass": {
       "id": 1,
       "name": "Hexagen0a",
       "revision": "0.0.0.A",
       "docsPath": "/docs/for/Hexagen0a",
-      "launcherPath": "gamma/gamma-main/1.0-SNAPSHOT/gamma-main-1.0-SNAPSHOT.jar!gamma.main.GammaLauncher",
-      "gamePath": "gamma/gamma-si/1.0-SNAPSHOT/gamma-si-1.0-SNAPSHOT.jar!gamma.games.hexagen.Hexagen",
-      "propNames": ""
+      "gamePath": "gamma/gamma-si/0.1.1-SNAPSHOT/gamma-si-0.1.1-SNAPSHOT.jar!gamma.games.hexagen.Hexagen",
+      "launcherPath": "gamma/gamma-main/0.1.2-SNAPSHOT/gamma-main-0.1.2-SNAPSHOT.jar!gamma.main.GammaLauncher",
+      "updated": 1488110506.0,
+      "propNames": "maxTerr"
     },
-    "gameInstProps": {}
+    "playerA": {
+      "name": "Player1s",
+      "rank": 3,
+      "score": 0,
+      "scoreTime": 1289520000.0,
+      "rankTime": 1289520000.0,
+      "displayClient": "https://game4.thegraid.com:8445/map",
+      "mainJar": {
+        "name": "FooPlayer1",
+        "main": true,
+        "auto": false,
+        "path": "jpeck/local/userAI/1.0-SNAPSHOT/userAI-1.0-SNAPSHOT.jar!userAI.player1.FooPlayer"
+      }
+    },
+    "playerB": {
+      "name": "Player2b",
+      "rank": 1,
+      "score": 500,
+      "scoreTime": 1291161600.0,
+      "rankTime": 1291161600.0,
+      "displayClient": "https://game4.thegraid.com:8445/map",
+      "mainJar": {
+        "name": "FooPlayer2",
+        "main": true,
+        "auto": false,
+        "path": "jpeck/local/userAI/1.0-SNAPSHOT/userAI-1.0-SNAPSHOT.jar!userAI.player2.FooPlayer2"
+      }
+    },
+    "gameName": "Player1s-vs-Player2b",
+    "hostUrl": "game5.thegraid.com:8445",
+    "propertyMap": {
+      "mapSize": 444,
+      "seed": 9999,
+      "maxTerr": 123,
+      "updated": 1.485691881e9
+    },
+    "created": 1294842240.0,
+    "updated": 1660653660.0
   },
-  "resultsToken": ""
+  "gpidA": 109,
+  "gpidB": 110,
+  "resultTicket": "P=iz38Z6wyTJTvwEa1vRnPV4ffPMh3CWgYpAt_TOxxKD0=&T=18474a5bc6b&U=user2&V=110"
 }

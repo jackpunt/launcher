@@ -2,7 +2,10 @@ package com.thegraid.share.domain.intf;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.thegraid.share.auth.AuthUtils;
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 
 @JsonIgnoreProperties({ "version", "id", "gameInst" })
 @JsonDeserialize(as = IGameInstPropsDTO.Impl.class)
@@ -136,6 +139,22 @@ public interface IGameInstPropsDTO {
         @Override
         public void setGameInst(IGameInstDTO gameInst) {
             this.gameInst = gameInst;
+        }
+
+        /** this.jsonify() + this.jsonProps */
+        public String toJson() {
+            String gameProps = AuthUtils.jsonify(this);
+            String allProps = gameProps.substring(0, gameProps.length() - 1);
+            allProps += (jsonProps.isEmpty() ? "}" : ", " + jsonProps.substring(1));
+            return allProps;
+        }
+
+        /** all these Props in a Map<String, Object> */
+        public Map<String, Object> asMap() {
+            @SuppressWarnings("unchecked")
+            HashMap<String, Object> map = AuthUtils.toType(toJson(), HashMap.class);
+            map.remove("jsonProps");
+            return map;
         }
     }
 }

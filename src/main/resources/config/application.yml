@@ -184,3 +184,6 @@ jhipster:
 # ===================================================================
 
 # application:
+thegraid:
+  assetBase: '/Users/jpeck/Data/Programs/mavenRepo/' # user assets?
+  commonLibs: [] # non-null

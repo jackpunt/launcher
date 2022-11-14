@@ -87,10 +87,10 @@ public interface IGameInstDTO extends Serializable {
         private Long id;
         private IGameClassDTO gameClass;
 
-        @JsonIgnoreProperties(value = { "gameClass", "mainJar", "user" }, allowSetters = true)
+        @JsonIgnoreProperties(value = { "gameClass", "user" }, allowSetters = true)
         private IPlayerDTO playerA;
 
-        @JsonIgnoreProperties(value = { "gameClass", "mainJar", "user" }, allowSetters = true)
+        @JsonIgnoreProperties(value = { "gameClass", "user" }, allowSetters = true)
         private IPlayerDTO playerB;
 
         private String gameName;

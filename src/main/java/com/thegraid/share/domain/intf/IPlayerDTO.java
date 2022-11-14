@@ -47,8 +47,10 @@ public interface IPlayerDTO {
 
     // public IGameClassDTO getGameClass();
     // public void setGameClass(IGameClassDTO gameClass);
-    // public IAssetDTO getMainJar();
-    // public void setMainJar(IAssetDTO mainJar);
+    public IAssetDTO getMainJar();
+
+    public void setMainJar(IAssetDTO mainJar);
+
     // public IUserDTO getUser();
     // public void setUser(IUserDTO user);
 
@@ -63,6 +65,7 @@ public interface IPlayerDTO {
         private Instant scoreTime;
         private Instant rankTime;
         private String displayClient;
+        private IAssetDTO mainJar;
 
         @Override
         public Long getGpid() {
@@ -152,6 +155,16 @@ public interface IPlayerDTO {
         @Override
         public void setDisplayClient(String displayClient) {
             this.displayClient = displayClient;
+        }
+
+        @Override
+        public IAssetDTO getMainJar() {
+            return this.mainJar;
+        }
+
+        @Override
+        public void setMainJar(IAssetDTO mainJar) {
+            this.mainJar = mainJar;
         }
     }
 }

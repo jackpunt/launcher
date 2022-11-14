@@ -1,6 +1,11 @@
 package com.thegraid.share.auth;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.util.function.Supplier;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -94,5 +99,35 @@ public class AuthUtils {
                     return clientHttpRequestExecution.execute(request, body);
                 });
         }
+    }
+
+    // TODO: try use Spring's ObjectMapper.
+    // https://stackoverflow.com/questions/30060006/how-do-i-obtain-the-jackson-objectmapper-in-use-by-spring-4-1
+    // For now, add JavaTimeModule()
+    // https://github.com/FasterXML/jackson-modules-java8/tree/2.14/datetime
+    static ObjectMapper mapper = JsonMapper.builder().addModule(new JavaTimeModule()).build().setDefaultPropertyInclusion(Include.NON_NULL);
+
+    public static String jsonify(Object obj) {
+        // https://www.baeldung.com/spring-boot-customize-jackson-objectmapper#1-objectmapper
+        try {
+            return mapper.writeValueAsString(obj);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("JSON conversion failed", e);
+        }
+    }
+
+    /** write obj to JSON, read back as clazz. */
+    public static <T> T toType(String content, Class<T> clazz) {
+        try {
+            return mapper.readValue(content, clazz);
+        } catch (JsonProcessingException ex) {
+            log.error("toType: FAILED - " + ex.getMessage());
+            return null;
+        }
+    }
+
+    /** write obj to JSON, read back as clazz. */
+    public static <T> T toType(Object obj, Class<T> clazz) {
+        return toType(jsonify(obj), clazz);
     }
 }
